@@ -1,3 +1,5 @@
+[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/marinalf/cnc-demo-terraform-azure)
+
 ## Sample [terraform](https://www.terraform.io) code with [Cisco Cloud Network Controller](https://www.cisco.com/c/en/us/solutions/data-center-virtualization/application-centric-infrastructure/cloud-network-controller.html)
 
 This project shows how Cloud Network Controller (CNC) works on Azure, how it normalizes and translates a cloud-like policy model into public cloud native constructs, and how Terraform can be leveraged to automate CNC operations.
@@ -18,7 +20,7 @@ CNC running on a dedicated Azure subscription or resource group. All credentials
 
 | Name      | Version |
 | --------- | ------- |
-| [aci](https://registry.terraform.io/providers/CiscoDevNet/aci/latest)|  >=2.5.2   |
+| [aci](https://registry.terraform.io/providers/CiscoDevNet/aci/latest)|  >=2.6.1   |
 
 **Installation**
 

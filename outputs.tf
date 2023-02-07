@@ -1,9 +1,7 @@
-
 # Outputs for VM deployment
 
-
 output "rg-name" {
-  value = "CNC_${data.aci_tenant.terraform_ten.name}_${aci_vrf.vrf1.name}_${aci_cloud_context_profile.ctx-vrf1.region}"
+  value = "CNC_${aci_tenant.terraform_ten.name}_${aci_vrf.vrf1.name}_${aci_cloud_context_profile.ctx-vrf1.region}"
 }
 
 output "vnet" {

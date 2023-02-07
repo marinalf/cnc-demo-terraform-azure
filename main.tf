@@ -1,18 +1,35 @@
-#Tenant + VRF
+#Tenant and Cloud Account mapping
 
-data "aci_tenant" "terraform_ten" {
-  name = var.tenant_name
+
+resource "aci_tenant" "terraform_ten" {
+  name        = var.tenant_name
+  description = "This tenant has been created by Terraform"
 }
 
+resource "aci_cloud_account" "cloud_provider" {
+  name        = "azure_cloud"
+  tenant_dn   = aci_tenant.terraform_ten.id
+  account_id  = var.subscription_id
+  access_type = "managed"
+  vendor      = "azure"
+}
+
+resource "aci_tenant_to_cloud_account" "cloud_acct_ten" {
+  tenant_dn        = aci_tenant.terraform_ten.id
+  cloud_account_dn = aci_cloud_account.cloud_provider.id
+}
+
+# VRF
+
 resource "aci_vrf" "vrf1" {
-  tenant_dn = data.aci_tenant.terraform_ten.id
+  tenant_dn = aci_tenant.terraform_ten.id
   name      = var.vrf_name
 }
 
 #Cloud Context Profile (VNet) + Subnets
 
 resource "aci_cloud_context_profile" "ctx-vrf1" {
-  tenant_dn                = data.aci_tenant.terraform_ten.id
+  tenant_dn                = aci_tenant.terraform_ten.id
   name                     = var.cxt_name
   primary_cidr             = var.cxt_cidr
   region                   = var.cxt_region
@@ -39,7 +56,7 @@ resource "aci_cloud_subnet" "cloud_subnet_user" {
 #Define Application Profile
 
 resource "aci_cloud_applicationcontainer" "myapp" {
-  tenant_dn = data.aci_tenant.terraform_ten.id
+  tenant_dn = aci_tenant.terraform_ten.id
   name      = var.app_profile
 }
 
@@ -56,7 +73,7 @@ resource "aci_cloud_epg" "cloud_apic_web" {
 resource "aci_cloud_endpoint_selector" "cloud_ep_selector1" {
   cloud_epg_dn     = aci_cloud_epg.cloud_apic_web.id
   name             = var.selector_web
-  match_expression = var.ip_based
+  match_expression = var.tag_based
 }
 
 #Define DB EPG
@@ -77,12 +94,12 @@ resource "aci_cloud_endpoint_selector" "cloud_ep_selector2" {
 #Define Web to DB Contract + Filter
 
 resource "aci_contract" "web-to-db" {
-  tenant_dn = data.aci_tenant.terraform_ten.id
+  tenant_dn = aci_tenant.terraform_ten.id
   name      = var.contract_name
 }
 
 resource "aci_filter" "web-to-db" {
-  tenant_dn = data.aci_tenant.terraform_ten.id
+  tenant_dn = aci_tenant.terraform_ten.id
   name      = var.filter_name
 }
 
@@ -127,12 +144,12 @@ resource "aci_cloud_endpoint_selectorfor_external_epgs" "ext_ep_selector" {
 #Define Web to Internet Contract + Filter
 
 resource "aci_contract" "web_internet" {
-  tenant_dn = data.aci_tenant.terraform_ten.id
+  tenant_dn = aci_tenant.terraform_ten.id
   name      = var.contract_name_internet
 }
 
 resource "aci_filter" "internet" {
-  tenant_dn = data.aci_tenant.terraform_ten.id
+  tenant_dn = aci_tenant.terraform_ten.id
   name      = var.filter_name_internet
 }
 

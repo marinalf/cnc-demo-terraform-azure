@@ -12,6 +12,10 @@ variable "tenant_name" {
   default = "devnet"
 }
 
+variable "infra_tenant_name" {
+  default = "infra"
+}
+
 variable "vrf_name" {
   default = "vrf-1"
 }
