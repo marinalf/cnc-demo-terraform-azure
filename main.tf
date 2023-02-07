@@ -1,5 +1,6 @@
-#Tenant and Cloud Account mapping
+### Define Cloud Networking Policies ###
 
+# Tenant and Cloud Account mapping
 
 resource "aci_tenant" "terraform_ten" {
   name        = var.tenant_name
@@ -26,7 +27,7 @@ resource "aci_vrf" "vrf1" {
   name      = var.vrf_name
 }
 
-#Cloud Context Profile (VNet) + Subnets
+# Cloud Context Profile for VNet + Subnets
 
 resource "aci_cloud_context_profile" "ctx-vrf1" {
   tenant_dn                = aci_tenant.terraform_ten.id
@@ -38,29 +39,30 @@ resource "aci_cloud_context_profile" "ctx-vrf1" {
   hub_network              = "uni/tn-infra/gwrouterp-${var.vnet_peering}" #VNet Peering is enabled by default
 }
 
+# Add User Subnets
+
 data "aci_cloud_cidr_pool" "cloud_cidr_pool" {
   cloud_context_profile_dn = aci_cloud_context_profile.ctx-vrf1.id
   addr                     = var.cxt_cidr
 }
-
-#User Subnets
 
 resource "aci_cloud_subnet" "cloud_subnet_user" {
   for_each           = var.user_subnets
   cloud_cidr_pool_dn = data.aci_cloud_cidr_pool.cloud_cidr_pool.id
   name               = each.value.name
   ip                 = each.value.ip
-  zone               = "uni/clouddomp/provp-azure/region-${each.value.zone}/zone-default"
 }
 
-#Define Application Profile
+### Define Security Policies ###
+
+# Application Profile
 
 resource "aci_cloud_applicationcontainer" "myapp" {
   tenant_dn = aci_tenant.terraform_ten.id
   name      = var.app_profile
 }
 
-#Define Web EPG
+# Web EPG
 
 resource "aci_cloud_epg" "cloud_apic_web" {
   name                            = var.epg_web
@@ -73,10 +75,10 @@ resource "aci_cloud_epg" "cloud_apic_web" {
 resource "aci_cloud_endpoint_selector" "cloud_ep_selector1" {
   cloud_epg_dn     = aci_cloud_epg.cloud_apic_web.id
   name             = var.selector_web
-  match_expression = var.tag_based
+  match_expression = var.ip_based
 }
 
-#Define DB EPG
+# DB EPG
 
 resource "aci_cloud_epg" "cloud_apic_db" {
   name                            = var.epg_db
@@ -91,7 +93,7 @@ resource "aci_cloud_endpoint_selector" "cloud_ep_selector2" {
   match_expression = var.tag_based
 }
 
-#Define Web to DB Contract + Filter
+# Web to DB Contract + Filter
 
 resource "aci_contract" "web-to-db" {
   tenant_dn = aci_tenant.terraform_ten.id
@@ -125,7 +127,7 @@ resource "aci_contract_subject" "web-to-db" {
   relation_vz_rs_subj_filt_att = [aci_filter.web-to-db.id]
 }
 
-#Define Cloud External EPG for Internet Access (L3Out)
+# Cloud External EPG for Internet Access
 
 resource "aci_cloud_external_epg" "cloud_apic_ext_epg" {
   name                            = var.epg_internet
@@ -141,7 +143,7 @@ resource "aci_cloud_endpoint_selectorfor_external_epgs" "ext_ep_selector" {
   subnet                = var.subnet_internet
 }
 
-#Define Web to Internet Contract + Filter
+# Web to Internet Contract + Filter
 
 resource "aci_contract" "web_internet" {
   tenant_dn = aci_tenant.terraform_ten.id
