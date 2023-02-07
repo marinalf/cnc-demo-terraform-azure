@@ -12,10 +12,6 @@ variable "tenant_name" {
   default = "devnet"
 }
 
-variable "infra_tenant_name" {
-  default = "infra"
-}
-
 variable "vrf_name" {
   default = "vrf-1"
 }
@@ -48,18 +44,15 @@ variable "user_subnets" {
   type = map(object({
     name = string
     ip   = string
-    zone = string
   }))
   default = {
     web-subnet = {
       name = "web-subnet"
       ip   = "172.11.1.0/24"
-      zone = "uksouth"
     },
     db-subnet = {
       name = "db-subnet"
       ip   = "172.11.2.0/24"
-      zone = "uksouth"
     }
   }
 }
