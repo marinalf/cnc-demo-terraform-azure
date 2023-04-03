@@ -7,6 +7,20 @@ resource "aci_tenant" "terraform_ten" {
   description = "This tenant has been created by Terraform"
 }
 
+#if using the same subscription as the infra tenant
+data "aci_cloud_account" "aci_cloud_account_infra" {
+  tenant_dn  = "uni/tn-infra"
+  account_id = var.subscription_id
+  vendor     = "azure"
+}
+
+resource "aci_tenant_to_cloud_account" "cloud_acct_ten" {
+  tenant_dn        = aci_tenant.terraform_ten.id
+  cloud_account_dn = data.aci_cloud_account.aci_cloud_account_infra.id
+}
+
+/*
+#if using a different subscription
 resource "aci_cloud_account" "cloud_provider" {
   name        = "azure_cloud"
   tenant_dn   = aci_tenant.terraform_ten.id
@@ -19,6 +33,7 @@ resource "aci_tenant_to_cloud_account" "cloud_acct_ten" {
   tenant_dn        = aci_tenant.terraform_ten.id
   cloud_account_dn = aci_cloud_account.cloud_provider.id
 }
+*/
 
 # VRF
 
