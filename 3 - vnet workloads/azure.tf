@@ -113,7 +113,7 @@ data "terraform_remote_state" "cnc" {
   backend = "local"
 
   config = {
-    path = "../terraform.tfstate"
+    path = "../1 - vnet networking/terraform.tfstate"
   }
 }
 

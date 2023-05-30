@@ -12,27 +12,21 @@ variable "tenant_name" {
   default = "devnet"
 }
 
-variable "vrf_name" {
-  default = "vrf-1"
+variable "vnet1_name" {
+  default = "vnet1"
 }
 
-# VNet Peering
+#Cloud Context Profile for VNets + Subnets
 
-variable "vnet_peering" {
-  description = "VNet Peering to infra hub VNet is enabled by default"
-  default     = "default"
-}
-#Cloud Context Profile (VPC) + Subnets
-
-variable "cxt_name" {
-  default = "ctx-vrf1-uksouth"
+variable "cxt_vnet1_name" {
+  default = "ctx-vnet1-uksouth"
 }
 
-variable "cxt_cidr" {
+variable "vnet1_cidr" {
   default = "172.11.0.0/16"
 }
 
-variable "cxt_region" {
+variable "vnet1_region" {
   default = "uksouth"
 }
 
@@ -40,7 +34,7 @@ variable "cloud_vendor" {
   default = "azure"
 }
 
-variable "user_subnets" {
+variable "vnet1_subnets" {
   type = map(object({
     name = string
     ip   = string
