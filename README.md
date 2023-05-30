@@ -20,12 +20,12 @@ CNC running on a dedicated Azure subscription or resource group. All credentials
 
 | Name      | Version |
 | --------- | ------- |
-| [aci](https://registry.terraform.io/providers/CiscoDevNet/aci/latest)|  >=2.6.1   |
+| [aci](https://registry.terraform.io/providers/CiscoDevNet/aci/latest)|  >=2.7.0   |
 
 **Installation**
 
 1. Install and set up your [terraform](https://www.terraform.io/downloads.html) environment
-2. Clone/copy the .tf files (main.tf, variables.tf, outputs.tf, and provider.tf) onto your terraform environment
+2. Clone/copy the .tf files onto your terraform environment
 3. Create a terraform.tfvars file with your CNC credentials and Azure subscription used for the user tenant/VNet
 4. Optionally, the azure.tf file deploys two VM instances (web-vm and db-vm) for testing purposes.
 
