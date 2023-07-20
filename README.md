@@ -20,7 +20,7 @@ CNC running on a dedicated Azure subscription or resource group. All credentials
 
 | Name      | Version |
 | --------- | ------- |
-| [aci](https://registry.terraform.io/providers/CiscoDevNet/aci/latest)|  >=2.7.0   |
+| [aci](https://registry.terraform.io/providers/CiscoDevNet/aci/latest)|  >=2.9.0   |
 
 **Installation**
 
